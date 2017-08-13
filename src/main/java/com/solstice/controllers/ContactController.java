@@ -9,6 +9,7 @@ import com.solstice.exceptions.UserNotFoundException;
 import com.solstice.model.Contact;
 import com.solstice.services.ContactService;
 
+import org.hibernate.validator.constraints.Email;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -34,28 +35,36 @@ public class ContactController {
 	}
 
 	@PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Contact> createEmployee(@Valid @RequestBody Contact contact) {
+	public ResponseEntity<Contact> createContact(@Valid @RequestBody Contact contact) {
 		contact = service.addNewContact(contact);
 		return new ResponseEntity<>(contact, HttpStatus.CREATED);
 	}
 
 	@PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Void> updateEmployee(@Valid @RequestBody Contact contact) {
+	public ResponseEntity<Void> updateContact(@Valid @RequestBody Contact contact) {
 		service.updateContact(contact);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
 	@GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Contact> findEmployeeById(@PathVariable long id) throws UserNotFoundException {
+	public ResponseEntity<Contact> findContactById(@PathVariable long id) throws UserNotFoundException {
 		Optional<Contact> contact = service.getContactById(id);// .orElseThrow(() -> new UserNotFoundException());
 		return contact.isPresent() ? new ResponseEntity<Contact>(contact.get(), HttpStatus.OK)
 				: new ResponseEntity<Contact>(HttpStatus.OK);
 	}
 
 	@DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Void> removeEmployeeById(@PathVariable Long id) {
+	public ResponseEntity<Void> removeContactById(@PathVariable Long id) {
 		service.removeContact(id);
 		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
+	@GetMapping(value = "/email", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Contact> findContactByEmail(@Valid @Email String mail)
+			throws UserNotFoundException {
+		Optional<Contact> contact = service.getContactByEmail(mail);// .orElseThrow(() -> new UserNotFoundException());
+		return contact.isPresent() ? new ResponseEntity<Contact>(contact.get(), HttpStatus.OK)
+				: new ResponseEntity<Contact>(HttpStatus.OK);
 	}
 
 }

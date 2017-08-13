@@ -118,6 +118,21 @@ public class ContactIntegrationTest {
 		assertThat(contacts.size()).isEqualTo(2);
 	}
 	
+	@Test
+	public void testGetByMail() {
+		Contact contactRequest = createContact();
+		HttpEntity<Contact> entity = new HttpEntity<Contact>(contactRequest);
+
+		ResponseEntity<Contact> createResponse = restTemplate.exchange("/api/v1/contact", HttpMethod.POST, entity,
+				Contact.class);
+
+		ResponseEntity<Contact> response = restTemplate.getForEntity("/api/v1/contact/email?mail=" + contactRequest.getEmail(), Contact.class);
+
+		Contact contact = response.getBody();
+
+		assertThat(contact.getEmail()).isEqualTo(contactRequest.getEmail());
+	}
+	
 	private Contact createContact() {
 		Contact contact = new Contact();
 		contact.setEmail("essie@vaill.com");

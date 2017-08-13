@@ -2,6 +2,8 @@
 
 ## Assumptions
 
+* It doesn't have any security but it easy to add with JWT or OAuth.
+
 * The name and email are the only mandatory fields.
 
 * The Address and the phone aren't mandatory fields.

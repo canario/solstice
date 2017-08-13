@@ -17,4 +17,6 @@ public interface ContactService {
     List<Contact> getAllContacts();
 
     void updateContact(Contact contact);
+
+	Optional<Contact> getContactByEmail(String email);
 }

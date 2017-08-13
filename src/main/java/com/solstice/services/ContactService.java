@@ -8,7 +8,7 @@ import com.solstice.model.Contact;
 
 public interface ContactService {
 
-    void addNewContact(Contact contact);
+    Contact addNewContact(Contact contact);
 
     void removeContact(Long id);
 

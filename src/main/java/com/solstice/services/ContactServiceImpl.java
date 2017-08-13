@@ -24,9 +24,9 @@ public class ContactServiceImpl implements ContactService {
 
     @Override
     @Transactional
-    public void addNewContact(Contact contact) {
+    public Contact addNewContact(Contact contact) {
         logger.debug("Saving contact: {}", contact);
-        repository.saveAndFlush(contact);
+        return repository.saveAndFlush(contact);
     }
 
     @Override

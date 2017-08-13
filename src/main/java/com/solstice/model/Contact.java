@@ -1,12 +1,12 @@
 package com.solstice.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
-
 
 @Entity(name = "Contact")
 @Table(name = "contact")
@@ -43,12 +43,14 @@ public class Contact implements Serializable {
     @JsonFormat(shape=JsonFormat.Shape.STRING)
     private Date birthdate;
 
+    @JsonInclude(Include.NON_NULL)
     @OneToOne(mappedBy = "contact", cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY, optional = false)
+            fetch = FetchType.LAZY, optional = true)
     private Phone phone;
 
+    @JsonInclude(Include.NON_NULL)
     @OneToOne(mappedBy = "contact", cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY, optional = false)
+            fetch = FetchType.LAZY, optional = true)
     private Address address;
 
     public Contact(){}

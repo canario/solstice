@@ -1,6 +1,7 @@
 package com.solstice.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -16,18 +17,23 @@ public class Address implements Serializable{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull( message = "error.street.notnull")
     @Column(name = "STREET")
     private String street;
 
+    @NotNull( message = "error.city.notnull")
     @Column(name = "CITY")
     private String city;
 
+    @NotNull( message = "error.state.notnull")
     @Column(name = "STATE")
     private String state;
 
+    @NotNull( message = "error.country.notnull")
     @Column(name = "COUNTRY")
     private String country;
 
+    @NotNull( message = "error.zip.notnull")
     @Column(name = "ZIP")
     private Integer zip;
 

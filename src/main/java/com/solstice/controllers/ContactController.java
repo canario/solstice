@@ -3,6 +3,8 @@ package com.solstice.controllers;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import com.solstice.exceptions.UserNotFoundException;
 import com.solstice.model.Contact;
 import com.solstice.services.ContactService;
@@ -10,10 +12,12 @@ import com.solstice.services.ContactService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(ContactController.BASE_URL)
+@Validated
 public class ContactController {
 
 	public static final String BASE_URL = "/api/v1/contact";
@@ -30,7 +34,7 @@ public class ContactController {
 	}
 
 	@PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Contact> createEmployee(@RequestBody Contact contact) {
+	public ResponseEntity<Contact> createEmployee(@Valid @RequestBody Contact contact) {
 		contact = service.addNewContact(contact);
 		return new ResponseEntity<>(contact, HttpStatus.CREATED);
 	}

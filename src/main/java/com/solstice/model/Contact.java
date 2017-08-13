@@ -5,13 +5,16 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Email;
+import org.springframework.validation.annotation.Validated;
 
 import java.io.Serializable;
 import java.util.Date;
 
+@Validated
 @Entity(name = "Contact")
 @Table(name = "contact")
 public class Contact implements Serializable {
@@ -54,6 +57,7 @@ public class Contact implements Serializable {
 	@OneToOne(mappedBy = "contact", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = true)
 	private Phone phone;
 
+	@Valid
 	@JsonInclude(Include.NON_NULL)
 	@OneToOne(mappedBy = "contact", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = true)
 	private Address address;

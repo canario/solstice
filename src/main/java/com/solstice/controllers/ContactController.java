@@ -40,7 +40,7 @@ public class ContactController {
 	}
 
 	@PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Void> updateEmployee(@RequestBody Contact contact) {
+	public ResponseEntity<Void> updateEmployee(@Valid @RequestBody Contact contact) {
 		service.updateContact(contact);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}

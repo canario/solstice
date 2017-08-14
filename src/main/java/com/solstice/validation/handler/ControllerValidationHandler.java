@@ -5,6 +5,7 @@ import java.util.Locale;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -19,15 +20,25 @@ import com.solstice.dto.MessageType;
 
 @ControllerAdvice
 public class ControllerValidationHandler {
+
 	@Autowired
 	private MessageSource msgSource;
 
-	@ExceptionHandler(MethodArgumentNotValidException.class)
+	@ExceptionHandler({ MethodArgumentNotValidException.class })
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ResponseBody
 	public MessageDTO processValidationError(MethodArgumentNotValidException ex) {
 		BindingResult result = ex.getBindingResult();
 		FieldError error = result.getFieldError();
+
+		return processFieldError(error);
+	}
+
+	@ExceptionHandler(DataIntegrityViolationException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ResponseBody
+	public MessageDTO processValidationError(DataIntegrityViolationException ex) {
+		FieldError error = new FieldError("", "", "error.email.unique");
 
 		return processFieldError(error);
 	}

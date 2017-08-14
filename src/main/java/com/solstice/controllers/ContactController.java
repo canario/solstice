@@ -5,16 +5,25 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
-import com.solstice.exceptions.UserNotFoundException;
-import com.solstice.model.Contact;
-import com.solstice.services.ContactService;
-
 import org.hibernate.validator.constraints.Email;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.solstice.exceptions.UserNotFoundException;
+import com.solstice.model.Contact;
+import com.solstice.services.ContactService;
 
 @RestController
 @RequestMapping(ContactController.BASE_URL)
@@ -34,6 +43,7 @@ public class ContactController {
 		return new ResponseEntity<>(service.getAllContacts(), HttpStatus.OK);
 	}
 
+	@ExceptionHandler({DataIntegrityViolationException.class})
 	@PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Contact> createContact(@Valid @RequestBody Contact contact) {
 		contact = service.addNewContact(contact);

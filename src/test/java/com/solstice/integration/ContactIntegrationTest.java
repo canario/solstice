@@ -47,6 +47,7 @@ public class ContactIntegrationTest {
 	public void testUpdate() {
 
 		Contact contactRequest = createContact();
+		contactRequest.setEmail("essie@solstice.com");
 		HttpEntity<Contact> entity = new HttpEntity<Contact>(contactRequest);
 
 		ResponseEntity<Contact> createResponse = restTemplate.exchange("/api/v1/contact", HttpMethod.POST, entity,
@@ -109,6 +110,8 @@ public class ContactIntegrationTest {
 		ResponseEntity<Contact> createResponse = restTemplate.exchange("/api/v1/contact", HttpMethod.POST, entity,
 				Contact.class);
 
+		contactRequest.setEmail("essie1@vaill.com");
+		entity = new HttpEntity<Contact>(contactRequest);
 		createResponse = restTemplate.exchange("/api/v1/contact", HttpMethod.POST, entity,
 				Contact.class);
 		ResponseEntity<List> response = restTemplate.getForEntity("/api/v1/contact", List.class);

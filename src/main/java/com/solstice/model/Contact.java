@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.Email;
 import org.springframework.validation.annotation.Validated;
@@ -16,7 +17,7 @@ import java.util.Date;
 
 @Validated
 @Entity(name = "Contact")
-@Table(name = "contact")
+@Table(name = "contact", uniqueConstraints = @UniqueConstraint(columnNames = {"email"}))
 public class Contact implements Serializable {
 
 	private static final long serialVersionUID = -1;
@@ -26,6 +27,7 @@ public class Contact implements Serializable {
 	private Long id;
 
 	@NotNull(message = "error.name.notnull")
+	@Size(min = 1, max =256, message = "error.name.length")
 	@Column(name = "NAME")
 	private String name;
 
@@ -43,6 +45,7 @@ public class Contact implements Serializable {
 
 	@Email(message = "error.email.wrong.format")
 	@NotNull(message = "error.email.notnull")
+	@Size(min = 1, max =256, message = "error.email.length")
 	@Column(name = "EMAIL")
 	private String email;
 
@@ -168,5 +171,45 @@ public class Contact implements Serializable {
 	public void setAddress(Address address) {
 		this.address = address;
 		address.setContact(this);
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((address == null) ? 0 : address.hashCode());
+		result = prime * result + ((birthdate == null) ? 0 : birthdate.hashCode());
+		result = prime * result + ((company == null) ? 0 : company.hashCode());
+		result = prime * result + ((email == null) ? 0 : email.hashCode());
+		result = prime * result + (favorite ? 1231 : 1237);
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((largeImageURL == null) ? 0 : largeImageURL.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((phone == null) ? 0 : phone.hashCode());
+		result = prime * result + ((smallImageURL == null) ? 0 : smallImageURL.hashCode());
+		result = prime * result + ((website == null) ? 0 : website.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Contact other = (Contact) obj;
+		if (email == null) {
+			if (other.email != null)
+				return false;
+		} else if (!email.equals(other.email))
+			return false;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		return true;
 	}
 }

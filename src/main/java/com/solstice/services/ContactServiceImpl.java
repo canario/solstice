@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.solstice.exceptions.UniqueEmailException;
+import com.solstice.exceptions.UserNotFoundException;
 import com.solstice.model.Contact;
 import com.solstice.repository.ContactRepository;
 
@@ -61,6 +62,9 @@ public class ContactServiceImpl implements ContactService {
 	@Transactional
 	public void updateContact(Contact contact) {
 		logger.debug("Updating userId: {}", contact.getId());
+		if(contact.getId() == null) {
+			throw new UserNotFoundException();
+		}
 		repository.saveAndFlush(contact);
 	}
 

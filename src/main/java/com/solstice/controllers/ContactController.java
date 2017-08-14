@@ -58,9 +58,8 @@ public class ContactController {
 
 	@GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Contact> findContactById(@PathVariable long id) throws UserNotFoundException {
-		Optional<Contact> contact = service.getContactById(id);// .orElseThrow(() -> new UserNotFoundException());
-		return contact.isPresent() ? new ResponseEntity<Contact>(contact.get(), HttpStatus.OK)
-				: new ResponseEntity<Contact>(HttpStatus.OK);
+		Contact contact = service.getContactById(id).orElseThrow(() -> new UserNotFoundException());
+		return new ResponseEntity<Contact>(contact, HttpStatus.OK);
 	}
 
 	@DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)

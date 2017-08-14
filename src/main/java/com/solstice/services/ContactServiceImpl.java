@@ -7,7 +7,6 @@ import javax.transaction.Transactional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import com.solstice.exceptions.UniqueEmailException;
@@ -29,12 +28,10 @@ public class ContactServiceImpl implements ContactService {
 	@Transactional
 	public Contact addNewContact(Contact contact) throws UniqueEmailException {
 		logger.debug("Saving contact: {}", contact);
-		try {
-			contact = repository.saveAndFlush(contact);
-		}catch (DataIntegrityViolationException e) {
+		if(repository.findByEmail(contact.getEmail()).isPresent()) {
 			throw new UniqueEmailException();
 		}
-		return contact;
+		return repository.saveAndFlush(contact);
 	}
 
 	@Override

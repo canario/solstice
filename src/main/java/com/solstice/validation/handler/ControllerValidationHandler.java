@@ -18,6 +18,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import com.solstice.dto.MessageDTO;
 import com.solstice.dto.MessageType;
 import com.solstice.exceptions.UniqueEmailException;
+import com.solstice.exceptions.UserNotFoundException;
 
 @EnableWebMvc
 @ControllerAdvice
@@ -45,6 +46,14 @@ public class ControllerValidationHandler {
 		return processFieldError(error);
 	}
 
+	@ExceptionHandler(UserNotFoundException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ResponseBody
+	public MessageDTO processValidationError(UserNotFoundException ex) {
+		FieldError error = new FieldError("", "", "error.user.notfound");
+
+		return processFieldError(error);
+	}
 	private MessageDTO processFieldError(FieldError error) {
 		MessageDTO message = null;
 		if (error != null) {

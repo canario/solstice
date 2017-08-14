@@ -1,6 +1,6 @@
 package com.solstice.exceptions;
 
-public class UserNotFoundException extends RuntimeException {
+public class UniqueEmailException extends RuntimeException {
 
     /**
 	 * 

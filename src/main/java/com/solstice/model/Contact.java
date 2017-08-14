@@ -17,7 +17,7 @@ import java.util.Date;
 
 @Validated
 @Entity(name = "Contact")
-@Table(name = "contact", uniqueConstraints = @UniqueConstraint(columnNames = {"email"}))
+@Table(name = "contact")
 public class Contact implements Serializable {
 
 	private static final long serialVersionUID = -1;
@@ -27,7 +27,7 @@ public class Contact implements Serializable {
 	private Long id;
 
 	@NotNull(message = "error.name.notnull")
-	@Size(min = 1, max =256, message = "error.name.length")
+	@Size(min = 1, max = 256, message = "error.name.length")
 	@Column(name = "NAME")
 	private String name;
 
@@ -45,8 +45,8 @@ public class Contact implements Serializable {
 
 	@Email(message = "error.email.wrong.format")
 	@NotNull(message = "error.email.notnull")
-	@Size(min = 1, max =256, message = "error.email.length")
-	@Column(name = "EMAIL")
+	@Size(min = 1, max = 256, message = "error.email.length")
+	@Column(name = "EMAIL", unique = true)
 	private String email;
 
 	@Column(name = "WEBSITE")

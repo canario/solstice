@@ -92,10 +92,9 @@ public class ContactIntegrationTest {
 
 	}
 
-	
 	@Test
 	public void testGetByIdEmpty() {
-		ResponseEntity<Contact> response = restTemplate.getForEntity("/api/v1/contact/1", Contact.class);
+		ResponseEntity<Contact> response = restTemplate.getForEntity("/api/v1/contact/100", Contact.class);
 
 		Contact contact = response.getBody();
 
@@ -112,15 +111,14 @@ public class ContactIntegrationTest {
 
 		contactRequest.setEmail("essie1@vaill.com");
 		entity = new HttpEntity<Contact>(contactRequest);
-		createResponse = restTemplate.exchange("/api/v1/contact", HttpMethod.POST, entity,
-				Contact.class);
+		createResponse = restTemplate.exchange("/api/v1/contact", HttpMethod.POST, entity, Contact.class);
 		ResponseEntity<List> response = restTemplate.getForEntity("/api/v1/contact", List.class);
 
 		List<Contact> contacts = response.getBody();
 
 		assertThat(contacts.size()).isEqualTo(2);
 	}
-	
+
 	@Test
 	public void testGetByMail() {
 		Contact contactRequest = createContact();
@@ -129,13 +127,14 @@ public class ContactIntegrationTest {
 		ResponseEntity<Contact> createResponse = restTemplate.exchange("/api/v1/contact", HttpMethod.POST, entity,
 				Contact.class);
 
-		ResponseEntity<Contact> response = restTemplate.getForEntity("/api/v1/contact/email?mail=" + contactRequest.getEmail(), Contact.class);
+		ResponseEntity<Contact> response = restTemplate
+				.getForEntity("/api/v1/contact/email?mail=" + contactRequest.getEmail(), Contact.class);
 
 		Contact contact = response.getBody();
 
 		assertThat(contact.getEmail()).isEqualTo(contactRequest.getEmail());
 	}
-	
+
 	private Contact createContact() {
 		Contact contact = new Contact();
 		contact.setEmail("essie@vaill.com");

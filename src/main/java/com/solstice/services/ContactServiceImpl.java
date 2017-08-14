@@ -1,15 +1,18 @@
 package com.solstice.services;
 
-import com.solstice.model.Contact;
-import com.solstice.repository.ContactRepository;
+import java.util.List;
+import java.util.Optional;
+
+import javax.transaction.Transactional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
-import java.util.List;
-import java.util.Optional;
+import com.solstice.exceptions.UniqueEmailException;
+import com.solstice.model.Contact;
+import com.solstice.repository.ContactRepository;
 
 @Service
 public class ContactServiceImpl implements ContactService {
@@ -24,9 +27,14 @@ public class ContactServiceImpl implements ContactService {
 
 	@Override
 	@Transactional
-	public Contact addNewContact(Contact contact) {
+	public Contact addNewContact(Contact contact) throws UniqueEmailException {
 		logger.debug("Saving contact: {}", contact);
-		return repository.saveAndFlush(contact);
+		try {
+			contact = repository.saveAndFlush(contact);
+		}catch (DataIntegrityViolationException e) {
+			throw new UniqueEmailException();
+		}
+		return contact;
 	}
 
 	@Override

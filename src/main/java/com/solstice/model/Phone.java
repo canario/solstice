@@ -12,7 +12,6 @@ public class Phone implements Serializable {
 
 	private static final long serialVersionUID = -7941769011539363185L;
 
-	@JsonIgnore
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;

@@ -61,7 +61,7 @@ public class Address implements Serializable{
         this.longitude = longitude;
     }
 
-    public Long id() {
+    public Long getId() {
         return id;
     }
 

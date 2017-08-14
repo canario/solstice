@@ -65,6 +65,14 @@ public class ContactServiceImpl implements ContactService {
 		if(contact.getId() == null) {
 			throw new UserNotFoundException();
 		}
+		// TODO: improve the way of the ids of the phone and address to not duplicate then
+		Contact persistedContact = repository.findOne(contact.getId());
+		if(	contact.getAddress() != null ){
+			contact.getAddress().setId(persistedContact.getAddress().getId());
+		}
+		if(contact.getPhone() != null) {
+			contact.getPhone().setId(persistedContact.getPhone().getId());
+		}
 		repository.saveAndFlush(contact);
 	}
 

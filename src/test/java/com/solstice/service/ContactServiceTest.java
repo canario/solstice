@@ -69,6 +69,7 @@ public class ContactServiceTest {
 
 		Contact contact = createContact();
 		when(repository.saveAndFlush(contact)).thenReturn(contact);
+		when(repository.findByEmail(contact.getEmail())).thenReturn(Optional.empty());
 		Contact contactResponse = contactService.addNewContact(contact);
 		assertThat(contactResponse.getId()).isEqualTo(contact.getId());
 	}

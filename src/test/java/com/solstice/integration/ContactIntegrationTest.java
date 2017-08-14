@@ -12,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -27,7 +28,7 @@ public class ContactIntegrationTest {
 	@Test
 	public void testCreate() {
 
-		Contact contactRequest = createContact();
+		Contact contactRequest = createContact("essie.create@vaill.com");
 		HttpEntity<Contact> entity = new HttpEntity<Contact>(contactRequest);
 
 		ResponseEntity<Contact> createResponse = restTemplate.exchange("/api/v1/contact", HttpMethod.POST, entity,
@@ -46,8 +47,7 @@ public class ContactIntegrationTest {
 	@Test
 	public void testUpdate() {
 
-		Contact contactRequest = createContact();
-		contactRequest.setEmail("essie@solstice.com");
+		Contact contactRequest = createContact("essie.update@vaill.com");
 		HttpEntity<Contact> entity = new HttpEntity<Contact>(contactRequest);
 
 		ResponseEntity<Contact> createResponse = restTemplate.exchange("/api/v1/contact", HttpMethod.POST, entity,
@@ -72,7 +72,7 @@ public class ContactIntegrationTest {
 	@Test
 	public void testDelete() {
 
-		Contact contactRequest = createContact();
+		Contact contactRequest = createContact("essie.delete@vaill.com");
 		HttpEntity<Contact> entity = new HttpEntity<Contact>(contactRequest);
 
 		ResponseEntity<Contact> createResponse = restTemplate.exchange("/api/v1/contact", HttpMethod.POST, entity,
@@ -86,9 +86,8 @@ public class ContactIntegrationTest {
 		ResponseEntity<Contact> response = restTemplate
 				.getForEntity("/api/v1/contact/" + createResponse.getBody().getId(), Contact.class);
 
-		Contact contact = response.getBody();
 
-		assertThat(contact).isEqualTo(null);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
 
 	}
 
@@ -96,14 +95,12 @@ public class ContactIntegrationTest {
 	public void testGetByIdEmpty() {
 		ResponseEntity<Contact> response = restTemplate.getForEntity("/api/v1/contact/100", Contact.class);
 
-		Contact contact = response.getBody();
-
-		assertThat(contact).isEqualTo(null);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
 	}
 
 	@Test
 	public void testGetAll() {
-		Contact contactRequest = createContact();
+		Contact contactRequest = createContact("essie.getAll@vaill.com");
 		HttpEntity<Contact> entity = new HttpEntity<Contact>(contactRequest);
 
 		ResponseEntity<Contact> createResponse = restTemplate.exchange("/api/v1/contact", HttpMethod.POST, entity,
@@ -121,7 +118,7 @@ public class ContactIntegrationTest {
 
 	@Test
 	public void testGetByMail() {
-		Contact contactRequest = createContact();
+		Contact contactRequest = createContact("essie.mail@vaill.com");
 		HttpEntity<Contact> entity = new HttpEntity<Contact>(contactRequest);
 
 		ResponseEntity<Contact> createResponse = restTemplate.exchange("/api/v1/contact", HttpMethod.POST, entity,
@@ -135,9 +132,9 @@ public class ContactIntegrationTest {
 		assertThat(contact.getEmail()).isEqualTo(contactRequest.getEmail());
 	}
 
-	private Contact createContact() {
+	private Contact createContact(String mail) {
 		Contact contact = new Contact();
-		contact.setEmail("essie@vaill.com");
+		contact.setEmail(mail);
 		contact.setName("Essie Vaill");
 		contact.setCompany("Litronic Industries");
 		contact.setId(new Long(1));
